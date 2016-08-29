@@ -1,0 +1,17 @@
+version: '2'
+services:
+    dounya-mongodb:
+        container_name: dounya-mongodb
+        image: mongo:3.3.9
+        ports:
+            - "27017:27017"
+        command: mongos --configdb dounya-mongodb-config
+    dounya-mongodb-node:
+        build:
+            context: .
+            dockerfile: mongodb/MongoDB.Dockerfile
+        command: mongod --replSet rs1 --noprealloc --smallfiles
+    dounya-mongodb-config:
+        image: mongo:mongo:3.3.9
+        container_name: dounya-mongodb-config
+        command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
